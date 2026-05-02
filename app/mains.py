@@ -36,12 +36,8 @@ def home():
 @app.get("/data")
 def get_data():
     try:
-        data = list(
-            collection.find({}, {"_id": 0})
-            .sort("timestamp", -1)  # latest first
-            .limit(50)
-        )
-        return data
+        data = list(collection.find().limit(5))
+        return {"data": str(data)}  # convert to string to avoid crash
     except Exception as e:
         return {"error": str(e)}
 
