@@ -36,10 +36,20 @@ def home():
 @app.get("/data")
 def get_data():
     try:
-        data = list(collection.find().limit(5))
-        return {"data": str(data)}  # convert to string to avoid crash
+        # test DB connection
+        collection.find_one()
+
+        data = list(collection.find({}, {"_id": 0}).limit(5))
+
+        # convert everything safely
+        for d in data:
+            for k, v in d.items():
+                d[k] = str(v)
+
+        return {"data": data}
+
     except Exception as e:
-        return {"error": str(e)}
+        return {"ERROR": str(e)}
 
 
 # 🧠 DIGITAL TWIN LOGIC
